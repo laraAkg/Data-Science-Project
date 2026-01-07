@@ -1,15 +1,14 @@
-# Heavy-Tail Detection – Data Generation & Model Training
+# Heavy-Tail Detection – Data Generation, Model Training & Evaluation
 
 ## Project Overview
 
-This project consists of **two Jupyter notebooks** that are used together:
+This project demonstrates a **complete and reproducible data science pipeline** for detecting  
+**heavy-tailed vs. non-heavy-tailed distributions** based on diagnostic plots.
 
-1. **Generate_Data.ipynb**  
-   → generates synthetic datasets and visualizations  
-2. **Model_Training.ipynb**  
-   → trains and evaluates a machine learning model using the generated data  
+The project is intentionally designed so that it can also be understood and used by  
+**non-expert or non–ML-specialist users** by simply running the notebooks step by step.
 
-The goal of the project is to **automatically distinguish between heavy-tailed and non-heavy-tailed distributions** based on diagnostic plots.
+It consists of **three Jupyter notebooks**, which are meant to be used together and in order.
 
 ---
 
@@ -24,99 +23,135 @@ It:
 - generates **synthetic datasets** from different statistical distributions  
   (e.g. Normal, Exponential, Pareto, Student-t, Lognormal)
 - automatically assigns a **label** indicating whether a dataset is heavy-tailed
-- creates **visual diagnostic plots** for each dataset:
+- creates **diagnostic plots** for each dataset:
   - Zipf plot  
   - Mean Excess (ME) plot  
   - Exponential Q–Q plot
-- generates **augmented versions** of the data (e.g. noise, resampling, scaling)
-- saves all outputs in a structured way:
-  - raw data files (`.npy`)
+- generates **augmented variants** of each dataset (noise, resampling, scaling)
+- stores all outputs in a structured way:
+  - raw data (`.npy`)
   - plots (`.png`)
   - metadata (`.json` and `.csv`)
 
-➡️ **Result:**  
-A complete, ready-to-use dataset including plots and metadata for model training.
+**Result:**  
+A complete dataset with plots and metadata, ready for model training.
 
 ---
 
-### 2️⃣ Model_Training.ipynb – Model Training & Evaluation
+### 2️⃣ Model_Training.ipynb – Model Training & Selection
 
-This notebook uses the generated data to train and evaluate a machine learning model.
+This notebook trains a neural network using the generated plots.
 
 It:
 
-- loads the generated datasets and plots
-- prepares the data for TensorFlow / Keras
-- trains a neural network to classify  
+- loads the generated plots and metadata
+- prepares image-based inputs for TensorFlow / Keras
+- trains a CNN to classify  
   **heavy-tailed vs. non-heavy-tailed distributions**
-- applies:
+- performs:
   - cross-validation
-  - hyperparameter search (e.g. learning rate, dropout)
+  - hyperparameter tuning (e.g. learning rate, dropout)
   - probability calibration
 - automatically selects the **best performing model**
-- generates a small **evaluation dashboard** with plots and metrics
+- generates evaluation plots and metrics
 - saves:
   - the final trained model
-  - a metadata JSON file with all important parameters and results
+  - a metadata file containing thresholds, calibration parameters, and CV results
 
-➡️ **Result:**  
-A trained model with transparent evaluation results and reproducible settings.
+**Result:**  
+A trained, calibrated model with reproducible and transparent evaluation results.
+
+---
+
+### 3️⃣ Model_Evaluation.ipynb – Model Evaluation & Explainability
+
+This notebook is used **after training** to analyze and apply the best model.
+
+It:
+
+- reloads the best trained model and its metadata
+- reconstructs the original cross-validation splits
+- summarizes model performance on:
+  - training
+  - validation
+  - test data
+- visualizes performance metrics (accuracy, ROC-AUC, etc.)
+- applies **Grad-CAM** to explain which plot regions influence the model’s decisions
+- allows evaluation of **real-world time series data**:
+  - CSV upload
+  - automatic plot generation
+  - prediction of heavy-tail probabilities
+- exports predictions and evaluation plots
+
+**Result:**  
+A transparent, explainable evaluation of the trained model, including support for real data.
 
 ---
 
 ## How to Use the Project (Step by Step)
 
-### 🟢 Requirements
+### Requirements
 
 - Google Colab **or** local Jupyter Notebook
-- No advanced programming or ML knowledge required
+- No advanced machine learning knowledge required
 
 ---
 
 ### Step 1: Generate the Data
 
 1. Open **Generate_Data.ipynb**
-2. Run all cells **from top to bottom**
-3. Wait until the notebook finishes execution
+2. Run all cells from top to bottom
+3. Wait until execution finishes
 
-➡️ The datasets, plots, and metadata are generated and saved automatically.
+All datasets, plots, and metadata are generated automatically.
 
 ---
 
 ### Step 2: Train the Model
 
 1. Open **Model_Training.ipynb**
-2. Make sure the data paths are correct  
-   (default paths are already prepared)
-3. Run all cells **in order**
-4. At the end:
-   - the best model is saved
-   - evaluation plots and reports are generated
+2. Ensure the default paths are unchanged
+3. Run all cells in order
+
+At the end:
+- the best model is saved
+- evaluation reports are created
+
+---
+
+### Step 3: Evaluate & Apply the Model
+
+1. Open **Model_Evaluation.ipynb**
+2. Run all cells from top to bottom
+3. Optional:
+   - upload your own CSV time series
+   - evaluate real-world data
+   - inspect Grad-CAM visual explanations
 
 ---
 
 ## Who Is This Project For?
 
 - Students in Data Science, Statistics, or Machine Learning
-- Anyone interested in understanding heavy-tailed distributions
-- Users who want to see a **complete, reproducible ML pipeline**
-- Also suitable for **non-expert users** by simply running the notebooks
+- Anyone interested in heavy-tailed distributions
+- Users who want to see a **complete end-to-end ML workflow**
 
 ---
 
 ## In Short
 
-- **Generate_Data.ipynb** → creates and visualizes data  
-- **Model_Training.ipynb** → learns from the data and evaluates the model  
+- **Generate_Data.ipynb** → creates and visualizes datasets  
+- **Model_Training.ipynb** → trains and selects the best model  
+- **Model_Evaluation.ipynb** → evaluates, explains, and applies the model  
 
 ---
 
 ## Generated Plots & Data (Google Drive)
 
-Due to file size constraints, all generated plots and datasets are **not stored directly in this GitHub repository**.
+Due to file size constraints, generated plots and datasets are **not stored directly in this repository**.
 
-All generated images (Zipf plots, Mean Excess plots, Q–Q plots) and related artifacts are available in the following Google Drive folder:
+All generated images and artifacts are available in the following Google Drive folder:
 
-🔗 https://drive.google.com/drive/folders/1-pF-IUwH5_dcQBodtGM_U-U_e8J0d5rB?usp=sharing
+https://drive.google.com/drive/folders/1-pF-IUwH5_dcQBodtGM_U-U_e8J0d5rB?usp=sharing
 
 This folder is automatically populated when running `Generate_Data.ipynb` in Google Colab.
